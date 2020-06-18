@@ -635,10 +635,10 @@ LocallabColor::LocallabColor():
     setExpandAlignProperties(expmaskcol, true, false, Gtk::ALIGN_FILL, Gtk::ALIGN_START);
 
     showmaskcolMethod->append(M("TP_LOCALLAB_SHOWMNONE"));
-    showmaskcolMethod->append(M("TP_LOCALLAB_SHOWMODIF"));
+//    showmaskcolMethod->append(M("TP_LOCALLAB_SHOWMODIF"));
     showmaskcolMethod->append(M("TP_LOCALLAB_SHOWMODIFMASK"));
     showmaskcolMethod->append(M("TP_LOCALLAB_SHOWMASK"));
-    showmaskcolMethod->append(M("TP_LOCALLAB_SHOWSTRUC"));
+//    showmaskcolMethod->append(M("TP_LOCALLAB_SHOWSTRUC"));
     showmaskcolMethod->append(M("TP_LOCALLAB_SHOWREF"));
     showmaskcolMethod->set_active(0);
     showmaskcolMethod->set_tooltip_markup(M("TP_LOCALLAB_SHOWMASKCOL_TOOLTIP"));

@@ -5993,11 +5993,14 @@ void ImProcFunctions::transit_shapedetect2(int call, int senstype, const LabImag
     const float refa = chromaref * cos(hueref) * 327.68f;
     const float refb = chromaref * sin(hueref) * 327.68f;
     const float refL = lumaref * 327.68f;
-
+    int toto = 1;
     //to preview modifications, scope, mask
     const bool expshow = ((lp.showmaskexpmet == 1 || lp.showmaskexpmet == 2) &&  senstype == 1);
     const bool vibshow = ((lp.showmaskvibmet == 1 || lp.showmaskvibmet == 2) &&  senstype == 2);
-    const bool colshow = ((lp.showmaskcolmet == 1 || lp.showmaskcolmet == 2) &&  senstype == 0);
+    bool colshow = ((lp.showmaskcolmet == 1 || lp.showmaskcolmet == 2) &&  senstype == 0);
+    if(toto == 1) {
+        colshow = ((lp.showmaskcolmet == 1) &&  senstype == 0);
+    }
     const bool SHshow = ((lp.showmaskSHmet == 1 || lp.showmaskSHmet == 2) &&  senstype == 9);
     const bool tmshow = ((lp.showmasktmmet == 1 || lp.showmasktmmet == 2) &&  senstype == 8);
     const bool lcshow = ((lp.showmasklcmet == 1 || lp.showmasklcmet == 2) &&  senstype == 10);
@@ -6006,7 +6009,11 @@ void ImProcFunctions::transit_shapedetect2(int call, int senstype, const LabImag
 
     const bool previewvib = ((lp.showmaskvibmet == 4) &&  senstype == 2);
     const bool previewexp = ((lp.showmaskexpmet == 5) &&  senstype == 1);
-    const bool previewcol = ((lp.showmaskcolmet == 5) &&  senstype == 0);
+    bool previewcol = ((lp.showmaskcolmet == 5) &&  senstype == 0);
+    if(toto == 1) {
+        previewcol = ((lp.showmaskcolmet == 3) &&  senstype == 0);        
+    }
+    
     const bool previewSH = ((lp.showmaskSHmet == 4) &&  senstype == 9);
     const bool previewtm = ((lp.showmasktmmet == 4) &&  senstype == 8);
     const bool previewlc = ((lp.showmasklcmet == 4) &&  senstype == 10);
@@ -6044,7 +6051,10 @@ void ImProcFunctions::transit_shapedetect2(int call, int senstype, const LabImag
 
     const bool usemaskvib = (lp.showmaskvibmet == 2 || lp.enavibMask || lp.showmaskvibmet == 4) && senstype == 2;
     const bool usemaskexp = (lp.showmaskexpmet == 2 || lp.enaExpMask || lp.showmaskexpmet == 5) && senstype == 1;
-    const bool usemaskcol = (lp.showmaskcolmet == 2 || lp.enaColorMask || lp.showmaskcolmet == 5) && senstype == 0;
+    bool usemaskcol = (lp.showmaskcolmet == 2 || lp.enaColorMask || lp.showmaskcolmet == 5) && senstype == 0;
+    if(toto == 1){
+        usemaskcol = (lp.showmaskcolmet == 1 || lp.enaColorMask || lp.showmaskcolmet == 3) && senstype == 0;
+    }
     const bool usemaskSH = (lp.showmaskSHmet == 2 || lp.enaSHMask || lp.showmaskSHmet == 4) && senstype == 9;
     const bool usemasktm = (lp.showmasktmmet == 2 || lp.enatmMask || lp.showmasktmmet == 4) && senstype == 8;
     const bool usemasklc = (lp.showmasklcmet == 2 || lp.enalcMask || lp.showmasklcmet == 4) && senstype == 10;
@@ -13475,7 +13485,8 @@ void ImProcFunctions::Lab_Local(
     const float b_basemerg = lp.lowBmerg / scaling;
     const bool ctoningmerg = (a_scalemerg != 0.f || b_scalemerg != 0.f || a_basemerg != 0.f || b_basemerg != 0.f);
 
-    if (!lp.inv && (lp.chro != 0 || lp.ligh != 0.f || lp.cont != 0 || ctoning || lp.mergemet > 0 ||  lp.strcol != 0.f ||  lp.strcolab != 0.f || lp.qualcurvemet != 0 || lp.showmaskcolmet == 2 || lp.enaColorMask || lp.showmaskcolmet == 3  || lp.showmaskcolmet == 4 || lp.showmaskcolmet == 5 || lp.prevdE) && lp.colorena) { // || lllocalcurve)) { //interior ellipse renforced lightness and chroma  //locallutili
+ //   if (!lp.inv && (lp.chro != 0 || lp.ligh != 0.f || lp.cont != 0 || ctoning || lp.mergemet > 0 ||  lp.strcol != 0.f ||  lp.strcolab != 0.f || lp.qualcurvemet != 0 || lp.showmaskcolmet == 2 || lp.enaColorMask || lp.showmaskcolmet == 3  || lp.showmaskcolmet == 4 || lp.showmaskcolmet == 5 || lp.prevdE) && lp.colorena) { // || lllocalcurve)) { //interior ellipse renforced lightness and chroma  //locallutili
+    if (!lp.inv && (lp.chro != 0 || lp.ligh != 0.f || lp.cont != 0 || ctoning || lp.mergemet > 0 ||  lp.strcol != 0.f ||  lp.strcolab != 0.f || lp.qualcurvemet != 0 || lp.showmaskcolmet == 1 || lp.enaColorMask || lp.showmaskcolmet == 2  || lp.showmaskcolmet == 3 || lp.showmaskcolmet == 5 || lp.prevdE) && lp.colorena) { // || lllocalcurve)) { //interior ellipse renforced lightness and chroma  //locallutili
         int ystart = rtengine::max(static_cast<int>(lp.yc - lp.lyT) - cy, 0);
         int yend = rtengine::min(static_cast<int>(lp.yc + lp.ly) - cy, original->H);
         int xstart = rtengine::max(static_cast<int>(lp.xc - lp.lxL) - cx, 0);
@@ -13490,6 +13501,7 @@ void ImProcFunctions::Lab_Local(
                 optfft(N_fftwsize, bfh, bfw, bfh, bfw, lp, original->H, original->W, xstart, ystart, xend, yend, cx, cy);
             }
 
+            std::unique_ptr<LabImage> bufcolorigsav;
             std::unique_ptr<LabImage> bufcolorig;
             std::unique_ptr<LabImage> bufcolfin;
             std::unique_ptr<LabImage> bufmaskblurcol;
@@ -13497,6 +13509,17 @@ void ImProcFunctions::Lab_Local(
             std::unique_ptr<LabImage> bufcolreserv;
             std::unique_ptr<LabImage> buftemp;
             array2D<float> blend2;
+
+            //for mask "alone with scope color'
+            int wo = original->W;
+            int ho = original->H;
+            LabImage *origsav = nullptr;
+            int maskchoice = 1;
+            if(maskchoice == 1) {
+                origsav = new LabImage(wo, ho);
+                origsav->CopyFrom(original);
+            }
+            //end mask alone
 
             float adjustr = 1.0f;
 
@@ -13521,8 +13544,12 @@ void ImProcFunctions::Lab_Local(
                 bufcolorig.reset(new LabImage(bfw, bfh));
                 bufcolfin.reset(new LabImage(bfw, bfh));
                 buftemp.reset(new LabImage(bfw, bfh));
+                if(maskchoice == 1) {
+                    bufcolorigsav.reset(new LabImage(bfw, bfh));
+                }
 
-                if (lp.showmaskcolmet == 2  || lp.enaColorMask || lp.showmaskcolmet == 3 || lp.showmaskcolmet == 5) {
+            //    if (lp.showmaskcolmet == 2  || lp.enaColorMask || lp.showmaskcolmet == 3 || lp.showmaskcolmet == 5) {
+                if (lp.showmaskcolmet == 1  || lp.enaColorMask || lp.showmaskcolmet == 2 || lp.showmaskcolmet == 3) {
                     bufmaskblurcol.reset(new LabImage(bfw, bfh, true));
                     originalmaskcol.reset(new LabImage(bfw, bfh));
                 }
@@ -13535,6 +13562,11 @@ void ImProcFunctions::Lab_Local(
                         bufcolorig->L[y][x] = original->L[y + ystart][x + xstart];
                         bufcolorig->a[y][x] = original->a[y + ystart][x + xstart];
                         bufcolorig->b[y][x] = original->b[y + ystart][x + xstart];
+                        if(maskchoice == 1) {
+                            bufcolorigsav->L[y][x] = original->L[y + ystart][x + xstart];
+                            bufcolorigsav->a[y][x] = original->a[y + ystart][x + xstart];
+                            bufcolorigsav->b[y][x] = original->b[y + ystart][x + xstart];
+                        }
                         bufcolfin->L[y][x] = original->L[y + ystart][x + xstart];
                         bufcolfin->a[y][x] = original->a[y + ystart][x + xstart];
                         bufcolfin->b[y][x] = original->b[y + ystart][x + xstart];
@@ -13581,10 +13613,10 @@ void ImProcFunctions::Lab_Local(
                 }
 
                 const int inv = 0;
-                const bool showmaske = lp.showmaskcolmet == 3;
+                const bool showmaske = lp.showmaskcolmet == 2;
                 const bool enaMask = lp.enaColorMask;
-                const bool deltaE = lp.showmaskcolmet == 5;
-                const bool modmask = lp.showmaskcolmet == 2;
+                const bool deltaE = lp.showmaskcolmet == 3;
+                const bool modmask = lp.showmaskcolmet == 1;
                 const bool zero = lp.showmaskcolmet == 0;
                 const bool modif = lp.showmaskcolmet == 1;
                 const float chrom = lp.chromacol;
@@ -13634,10 +13666,30 @@ void ImProcFunctions::Lab_Local(
                             maxdE, mindE, maxdElim, mindElim, lp.iterat, limscope, sco
                            );
 
-                if (lp.showmaskcolmet == 3) {
+                if (lp.showmaskcolmet == 2) {
                     showmask(lumask, lp, xstart, ystart, cx, cy, bfw, bfh, bufcolorig.get(), transformed, bufmaskblurcol.get(), 0);
                     return;
                 } else if (lp.showmaskcolmet == 4) {
+                    return;
+                }
+
+                if(maskchoice == 1) {//mask alone with scope...but whithout all settings...
+#ifdef _OPENMP
+                #pragma omp parallel for schedule(dynamic,16) if (multiThread)
+#endif
+                    for (int y = 0; y < bfh ; y++) {
+                        for (int x = 0; x < bfw; x++) {
+                            bufcolfin->L[y][x] = bufcolorig->L[y][x];
+                            bufcolfin->a[y][x] = bufcolorig->a[y][x];
+                            bufcolfin->b[y][x] = bufcolorig->b[y][x];
+                        }
+                    }
+
+
+                    float meansob = 0.f;
+                    transit_shapedetect2(call, 0, bufcolorigsav.get(), bufcolfin.get(), originalmaskcol.get(), hueref, chromaref, lumaref, sobelref, meansob, blend2, lp, origsav, transformed, cx, cy, sk);
+                    delete origsav;
+                    origsav    = NULL;
                     return;
                 }
 
