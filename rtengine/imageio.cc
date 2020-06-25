@@ -1631,14 +1631,14 @@ int ImageIO::saveEXR (const Glib::ustring &fname, int bps, int compressionLevel,
 
     for (int row = 0; row < height; row++) {
         getScanline (row, lineBuffer, bps, isFloat);
-	for (int col = 0; col < width; col++) {
+        for (int col = 0; col < width; col++) {
             float* sbuffer = (float*)lineBuffer;
             Rgba &p =  inPixels[row][col];
-	    p.r = sbuffer[col*3+0];
-	    p.g = sbuffer[col*3+1];
-	    p.b = sbuffer[col*3+2];
-	    p.a = 1.;
-	}
+            p.r = sbuffer[col*3+0];
+            p.g = sbuffer[col*3+1];
+            p.b = sbuffer[col*3+2];
+            p.a = 1.;
+        }
     }
 
     out.setFrameBuffer(&inPixels[0][0], 1, width);

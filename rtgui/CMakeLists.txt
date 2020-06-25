@@ -191,7 +191,7 @@ if(WIN32)
         ${GTK_INCLUDE_DIRS}
         ${IPTCDATA_INCLUDE_DIRS}
         ${LENSFUN_INCLUDE_DIRS}
-	${OPENEXR_INCLUDE_DIRS}
+        ${OPENEXR_INCLUDE_DIRS}
         ${RSVG_INCLUDE_DIRS}
         )
     link_directories(. "${PROJECT_SOURCE_DIR}/rtexif"
@@ -204,7 +204,7 @@ if(WIN32)
         ${GTK_LIBRARY_DIRS}
         ${IPTCDATA_LIBRARY_DIRS}
         ${LENSFUN_LIBRARY_DIRS}
-	${OPENEXR_LIBRARY_DIRS}
+        ${OPENEXR_LIBRARY_DIRS}
         ${RSVG_LIBRARY_DIRS}
         )
 else()
@@ -223,7 +223,7 @@ else()
         ${IPTCDATA_INCLUDE_DIRS}
         ${LCMS_INCLUDE_DIRS}
         ${LENSFUN_INCLUDE_DIRS}
-	${OPENEXR_INCLUDE_DIRS}
+        ${OPENEXR_INCLUDE_DIRS}
         ${RSVG_INCLUDE_DIRS}
         )
     link_directories(${EXTRA_LIBDIR}
@@ -241,7 +241,7 @@ else()
         ${IPTCDATA_LIBRARY_DIRS}
         ${LCMS_LIBRARY_DIRS}
         ${LENSFUN_LIBRARY_DIRS}
-	${OPENEXR_LIBRARY_DIRS}
+        ${OPENEXR_LIBRARY_DIRS}
         ${RSVG_LIBRARY_DIRS}
         )
 endif()
