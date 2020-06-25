@@ -57,7 +57,7 @@ link_directories("${PROJECT_SOURCE_DIR}/rtexif"
     "${IPTCDATA_LIBRARY_DIRS}"
     "${LCMS_LIBRARY_DIRS}"
     "${LENSFUN_LIBRARY_DIRS}"
-    "${OPENERX_LIBRARY_DIRS}"
+    "${OPENEXR_LIBRARY_DIRS}"
     "${RSVG_LIBRARY_DIRS}"
 )
 
