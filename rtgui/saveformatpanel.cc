@@ -237,7 +237,7 @@ void SaveFormatPanel::formatChanged ()
     } else if (fr == "exr") {
         jpegOpts->hide();
         tiffUncompressed->hide();
-	exrOpts->show_all();
+        exrOpts->show_all();
     }
 
     if (listener) {
