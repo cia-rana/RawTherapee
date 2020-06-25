@@ -1833,6 +1833,14 @@ public:
       * @param isFloat is true for saving float images. Will be ignored by file format not supporting float data
         @return the error code, 0 if none */
     virtual int saveAsTIFF (const Glib::ustring &fname, int bps = -1, bool isFloat = false, bool uncompressed = false) const = 0;
+    /** @brief Saves the image to file in a OpenEXR format.
+     * @param fname is the name of the file
+     * @param bps can be 16 or 32 depending on the bits per pixels the output file will have
+     * @oaram compressionLevel is the comression level (1...10000).
+     * @param compressionMethod  is the compression method.
+     * @param isFloat is true for saving float images. Will be ignored by file format not supporting float data
+       @return the error code. 0 if none */
+    virtual int saveAsEXR (const Glib::ustring &fname, int bos = -1, int compressionLevel = 45, int compressionMethod = 0, bool isFloat = false) const = 0;
     /** @brief Sets the progress listener if you want to follow the progress of the image saving operations (optional).
       * @param pl is the pointer to the class implementing the ProgressListener interface */
     virtual void setSaveProgressListener (ProgressListener* pl) = 0;

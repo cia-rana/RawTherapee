@@ -1774,6 +1774,9 @@ bool EditorPanel::idle_saveImage (ProgressConnector<rtengine::IImagefloat*> *pc,
         else if (sf.format == "jpg")
             ld->startFunc (sigc::bind (sigc::mem_fun (img, &rtengine::IImagefloat::saveAsJPEG), fname, sf.jpegQuality, sf.jpegSubSamp),
                            sigc::bind (sigc::mem_fun (*this, &EditorPanel::idle_imageSaved), ld, img, fname, sf, pparams));
+        else if (sf.format == "exr")
+            ld->startFunc (sigc::bind (sigc::mem_fun (img, &rtengine::IImagefloat::saveAsEXR), fname, sf.exrBits, sf.exrCompressionLevel, sf.exrCompressionMethod, sf.exrFloat),
+                           sigc::bind (sigc::mem_fun (*this, &EditorPanel::idle_imageSaved), ld, img, fname, sf, pparams));
         else {
             delete ld;
         }

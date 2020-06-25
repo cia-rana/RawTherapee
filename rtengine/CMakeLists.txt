@@ -28,6 +28,9 @@ endif()
 if(IPTCDATA_INCLUDE_DIRS)
     include_directories("${IPTCDATA_INCLUDE_DIRS}")
 endif()
+if(OPENEXR_INCLUDE_DIRS)
+    include_directories("${OPENEXR_INCLUDE_DIRS}")
+endif()
 if(LCMS_INCLUDE_DIRS)
     include_directories("${LCMS_INCLUDE_DIRS}")
 endif()
@@ -54,6 +57,7 @@ link_directories("${PROJECT_SOURCE_DIR}/rtexif"
     "${IPTCDATA_LIBRARY_DIRS}"
     "${LCMS_LIBRARY_DIRS}"
     "${LENSFUN_LIBRARY_DIRS}"
+    "${OPENERX_LIBRARY_DIRS}"
     "${RSVG_LIBRARY_DIRS}"
 )
 
@@ -213,6 +217,7 @@ target_link_libraries(rtengine rtexif
     ${GOBJECT_LIBRARIES}
     ${GTHREAD_LIBRARIES}
     ${IPTCDATA_LIBRARIES}
+    ${OPENEXR_LIBRARIES}
     ${JPEG_LIBRARIES}
     ${LCMS_LIBRARIES}
     ${PNG_LIBRARIES}

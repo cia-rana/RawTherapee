@@ -26,14 +26,15 @@
 namespace
 {
 
-const std::array<std::pair<const char*, SaveFormat>, 7> sf_templates = {{
+const std::array<std::pair<const char*, SaveFormat>, 8> sf_templates = {{
      {"JPEG (8-bit)", SaveFormat("jpg", 8, 8, false)},
      {"TIFF (8-bit)", SaveFormat("tif", 8, 8, false)},
      {"TIFF (16-bit)", SaveFormat("tif", 8, 16, false)},
      {"TIFF (16-bit float)", SaveFormat("tif", 8, 16, true)},
      {"TIFF (32-bit float)", SaveFormat("tif", 8, 32, true)},
      {"PNG (8-bit)", SaveFormat("png", 8, 8, false)},
-     {"PNG (16-bit)", SaveFormat("png", 16, 8, false)}
+     {"PNG (16-bit)", SaveFormat("png", 16, 8, false)},
+     {"OpenEXR (32-bit float)", SaveFormat("exr", 8, 8, false)}
 }};
 
 }
@@ -100,6 +101,34 @@ SaveFormatPanel::SaveFormatPanel () : listener (nullptr)
     tiffUncompressed->signal_toggled().connect( sigc::mem_fun(*this, &SaveFormatPanel::formatChanged));
     tiffUncompressed->show_all();
 
+    // ---------------------  OpenEXR OPTIONS
+
+
+    exrOpts = Gtk::manage (new Gtk::Grid ());
+    exrOpts->set_column_spacing(15);
+    exrOpts->set_row_spacing(5);
+    setExpandAlignProperties(exrOpts, true, false, Gtk::ALIGN_FILL, Gtk::ALIGN_CENTER);
+
+    exrCompressionLevel = new Adjuster (Glib::ustring("DWA Compression Level"), 0, 100, 1, 45);
+    setExpandAlignProperties(exrCompressionLevel, true, false, Gtk::ALIGN_FILL, Gtk::ALIGN_CENTER);
+    exrCompressionLevel->setAdjusterListener (this);
+
+    exrCompressionMethodLabel = Gtk::manage (new Gtk::Label (Glib::ustring("Compression Method") + Glib::ustring(":")));
+    setExpandAlignProperties(exrCompressionMethodLabel, true, false, Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
+
+    exrCompressionMethod = Gtk::manage (new MyComboBoxText ());
+    setExpandAlignProperties(exrCompressionMethod, true, false, Gtk::ALIGN_FILL, Gtk::ALIGN_CENTER);
+    exrCompressionMethod->append (M("None"));
+    exrCompressionMethod->append (M("Zip"));
+    exrCompressionMethod->append (M("DWAA"));
+    exrCompressionMethod->append (M("DWAB"));
+    exrCompressionMethod->set_active (0);
+    exrCompressionMethod->signal_changed().connect(sigc::mem_fun(*this, &SaveFormatPanel::formatChanged));
+
+    exrOpts->attach(*exrCompressionLevel, 0, 0, 1, 2);
+    exrOpts->attach(*exrCompressionMethodLabel, 1, 0, 1, 1);
+    exrOpts->attach(*exrCompressionMethod, 1, 1, 1, 1);
+    exrOpts->show_all();
 
     // ---------------------  MAIN BOX
 
@@ -114,6 +143,7 @@ SaveFormatPanel::SaveFormatPanel () : listener (nullptr)
     attach (*hb1, 0, 0, 1, 1);
     attach (*jpegOpts, 0, 1, 1, 1);
     attach (*tiffUncompressed, 0, 2, 1, 1);
+    attach (*exrOpts, 0, 3, 1, 1);
     attach (*savesPP, 0, 4, 1, 2);
 }
 SaveFormatPanel::~SaveFormatPanel ()
@@ -175,6 +205,8 @@ SaveFormat SaveFormatPanel::getFormat ()
     sf.jpegQuality = jpegQual->getValue();
     sf.jpegSubSamp = jpegSubSamp->get_active_row_number() + 1;
     sf.tiffUncompressed = tiffUncompressed->get_active();
+    sf.exrCompressionLevel = exrCompressionLevel->getValue();
+    sf.exrCompressionMethod = exrCompressionMethod->get_active_row_number();
     sf.saveParams = savesPP->get_active();
 
     return sf;
@@ -193,12 +225,19 @@ void SaveFormatPanel::formatChanged ()
     if (fr == "jpg") {
         jpegOpts->show_all();
         tiffUncompressed->hide();
+	exrOpts->hide();
     } else if (fr == "png") {
         jpegOpts->hide();
         tiffUncompressed->hide();
+	exrOpts->hide();
     } else if (fr == "tif") {
         jpegOpts->hide();
         tiffUncompressed->show_all();
+	exrOpts->hide();
+    } else if (fr == "exr") {
+        jpegOpts->hide();
+        tiffUncompressed->hide();
+	exrOpts->show_all();
     }
 
     if (listener) {

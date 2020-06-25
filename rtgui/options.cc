@@ -314,6 +314,10 @@ void Options::setDefaults()
     saveFormat.tiffBits = 16;
     saveFormat.tiffFloat = false;
     saveFormat.tiffUncompressed = true;
+    saveFormat.exrBits = 32;
+    saveFormat.exrCompressionLevel = 45;
+    saveFormat.exrCompressionMethod = 0;
+    saveFormat.exrFloat = true;
     saveFormat.saveParams = true;
 
     saveFormatBatch.format = "jpg";
@@ -323,6 +327,10 @@ void Options::setDefaults()
     saveFormatBatch.tiffBits = 16;
     saveFormatBatch.tiffFloat = false;
     saveFormatBatch.tiffUncompressed = true;
+    saveFormatBatch.exrBits = 32;
+    saveFormatBatch.exrCompressionLevel = 45;
+    saveFormatBatch.exrCompressionMethod = 0;
+    saveFormatBatch.exrFloat = true;
     saveFormatBatch.saveParams = true;
 
     savePathTemplate = "%p1/converted/%f";

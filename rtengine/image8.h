@@ -89,6 +89,11 @@ public:
         return saveTIFF (fname, bps, isFloat, uncompressed);
     }
 
+    int saveAsEXR (const Glib::ustring &fname, int bps = -1, int compressionLevel = 45, int compressionMethod = 0, bool isFloat = false) const override
+    {
+       return saveEXR (fname, bps, compressionLevel, compressionMethod, isFloat);
+    }
+
     void setSaveProgressListener (ProgressListener* pl) override
     {
         setProgressListener (pl);

@@ -44,10 +44,13 @@
 #include "color.h"
 
 #include "jpeg.h"
+#include "openexr.h"
 
 using namespace std;
 using namespace rtengine;
 using namespace rtengine::procparams;
+using namespace OPENEXR_IMF_NAMESPACE;
+using namespace IMATH_NAMESPACE;
 
 namespace
 {
@@ -1592,6 +1595,58 @@ int ImageIO::saveTIFF (const Glib::ustring &fname, int bps, bool isFloat, bool u
         g_remove (fname.c_str());
         return IMIO_CANNOTWRITEFILE;
     }
+}
+
+int ImageIO::saveEXR (const Glib::ustring &fname, int bps, int compressionLevel, int compressionMethod, bool isFloat) const
+{
+    int width = getWidth(), height = getHeight();
+
+    Header header (width, height);
+    header.lineOrder() = INCREASING_Y;
+    switch (compressionMethod) {
+    case 0:
+        header.compression() = Compression::NO_COMPRESSION;
+        break;
+    case 1:
+        header.compression() = Compression::ZIP_COMPRESSION;
+        break;
+    case 2:
+        header.compression() = Compression::DWAA_COMPRESSION;
+        header.insert("dwaCompressionLevel", FloatAttribute(compressionLevel));
+        break;
+    case 3:
+        header.compression() = Compression::DWAB_COMPRESSION;
+        header.insert("dwaCompressionLevel", FloatAttribute(compressionLevel));
+        break;
+    default:
+        header.compression() = Compression::NO_COMPRESSION;
+        break;
+    }
+
+    Array2D <Rgba> inPixels;
+    inPixels.resizeErase (height, width);
+    int lineWidth =  width * 3 * bps / 8;
+    unsigned char* lineBuffer = new unsigned char[lineWidth];
+    RgbaOutputFile out (fname.c_str(), header);
+
+    for (int row = 0; row < height; row++) {
+        getScanline (row, lineBuffer, bps, isFloat);
+	for (int col = 0; col < width; col++) {
+            float* sbuffer = (float*)lineBuffer;
+            Rgba &p =  inPixels[row][col];
+	    p.r = sbuffer[col*3+0];
+	    p.g = sbuffer[col*3+1];
+	    p.b = sbuffer[col*3+2];
+	    p.a = 1.;
+	}
+    }
+
+    out.setFrameBuffer(&inPixels[0][0], 1, width);
+    out.writePixels(height);
+
+    delete [] lineBuffer;
+
+    return IMIO_SUCCESS;
 }
 
 // PNG read and write routines:

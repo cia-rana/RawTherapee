@@ -61,6 +61,10 @@ struct SaveFormat {
         int _tiff_bits,
         bool _tiff_float,
         bool _tiff_uncompressed,
+        int _exr_bits,
+        int _exr_compression_level,
+        int _exr_compression_method,
+        bool _exr_float,
         bool _save_params
     ) :
         format(_format),
@@ -70,6 +74,10 @@ struct SaveFormat {
         tiffBits(_tiff_bits),
         tiffFloat(_tiff_float),
         tiffUncompressed(_tiff_uncompressed),
+        exrBits(_exr_bits),
+        exrCompressionLevel(_exr_compression_level),
+        exrCompressionMethod(_exr_compression_method),
+        exrFloat(_exr_float),
         saveParams(_save_params)
     {
     }
@@ -87,6 +95,10 @@ struct SaveFormat {
             _tiff_bits,
             _tiff_float,
             true,
+            32,
+            45,
+            0,
+            true,
             true
         )
     {
@@ -103,6 +115,10 @@ struct SaveFormat {
     int tiffBits;
     bool tiffFloat;
     bool tiffUncompressed;
+    int exrBits;
+    int exrCompressionLevel;
+    int exrCompressionMethod;
+    bool exrFloat;
     bool saveParams;
 };
 

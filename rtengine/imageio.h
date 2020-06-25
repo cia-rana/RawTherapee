@@ -115,6 +115,7 @@ public:
     int savePNG (const Glib::ustring &fname, int bps = -1) const;
     int saveJPEG (const Glib::ustring &fname, int quality = 100, int subSamp = 3) const;
     int saveTIFF (const Glib::ustring &fname, int bps = -1, bool isFloat = false, bool uncompressed = false) const;
+    int saveEXR (const Glib::ustring &fname, int bps = -1, int compressionLevel = 45, int compressionMethod = 0, bool isFloat = false) const;
 
     cmsHPROFILE getEmbeddedProfile () const;
     void getEmbeddedProfileData (int& length, unsigned char*& pdata) const;
