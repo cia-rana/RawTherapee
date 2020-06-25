@@ -189,7 +189,9 @@ if(WIN32)
         ${GLIBMM_INCLUDE_DIRS}
         ${GTKMM_INCLUDE_DIRS}
         ${GTK_INCLUDE_DIRS}
+        ${IPTCDATA_INCLUDE_DIRS}
         ${LENSFUN_INCLUDE_DIRS}
+	${OPENEXR_INCLUDE_DIRS}
         ${RSVG_INCLUDE_DIRS}
         )
     link_directories(. "${PROJECT_SOURCE_DIR}/rtexif"
@@ -200,7 +202,9 @@ if(WIN32)
         ${GLIBMM_LIBRARY_DIRS}
         ${GTKMM_LIBRARY_DIRS}
         ${GTK_LIBRARY_DIRS}
+        ${IPTCDATA_LIBRARY_DIRS}
         ${LENSFUN_LIBRARY_DIRS}
+	${OPENEXR_LIBRARY_DIRS}
         ${RSVG_LIBRARY_DIRS}
         )
 else()
@@ -219,6 +223,7 @@ else()
         ${IPTCDATA_INCLUDE_DIRS}
         ${LCMS_INCLUDE_DIRS}
         ${LENSFUN_INCLUDE_DIRS}
+	${OPENEXR_INCLUDE_DIRS}
         ${RSVG_INCLUDE_DIRS}
         )
     link_directories(${EXTRA_LIBDIR}
@@ -236,6 +241,7 @@ else()
         ${IPTCDATA_LIBRARY_DIRS}
         ${LCMS_LIBRARY_DIRS}
         ${LENSFUN_LIBRARY_DIRS}
+	${OPENEXR_LIBRARY_DIRS}
         ${RSVG_LIBRARY_DIRS}
         )
 endif()
@@ -287,6 +293,7 @@ target_link_libraries(rth rtengine
     ${LCMS_LIBRARIES}
     ${PNG_LIBRARIES}
     ${TIFF_LIBRARIES}
+    ${OPENEXR_LIBRARIES}
     ${ZLIB_LIBRARIES}
     ${LENSFUN_LIBRARIES}
     ${RSVG_LIBRARIES}
@@ -309,6 +316,7 @@ target_link_libraries(rth-cli rtengine
     ${LCMS_LIBRARIES}
     ${PNG_LIBRARIES}
     ${TIFF_LIBRARIES}
+    ${OPENEXR_LIBRARIES}
     ${ZLIB_LIBRARIES}
     ${LENSFUN_LIBRARIES}
     ${RSVG_LIBRARIES}
