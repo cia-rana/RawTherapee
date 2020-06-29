@@ -267,6 +267,7 @@ int processLineParams ( int argc, char **argv )
     bool useDefault = false;
     unsigned int sideCarFilePos = 0;
     int compression = 92;
+    int compressionMethod = 0;
     int subsampling = 3;
     int bits = -1;
     bool isFloat = false;
@@ -427,7 +428,31 @@ int processLineParams ( int argc, char **argv )
                     outputType = "png";
                     compression = -1;
                     break;
+                case 'x':
+                    if (currParam.length() > 2 && currParam.at (2) == 'm') {
+                        std::string cm = currParam.substr(3);
+                        compressionMethod = atoi (cm.c_str());
+                        if (compressionMethod < 0 || compressionMethod > 3) {
+                            std::cerr << "Error: the value accompanying the -xm switch has to be in the [0-3] range!" << std::endl;
+                            deleteProcParams (processingParams);
+                            return -3;
+                        }
+                    } else {
+                        outputType = "exr";
+		        isFloat = true;
 
+			if (currParam.size() < 3) {
+                            compression = 45;
+			} else {
+                            compression = atoi(currParam.substr (2).c_str());
+
+			    if (compression < 1 || compression > 1000) {
+                                std::cerr << "Error: the value accompanying the -x switch has to be in the [1-1000] range!" << std::endl;
+                                deleteProcParams (processingParams);
+                                return -3;
+			    }
+			}
+                    }
                 case 'f':
                     fast_export = true;
                     break;
@@ -538,7 +563,7 @@ int processLineParams ( int argc, char **argv )
                     std::cout << "  " << Glib::path_get_basename (argv[0]) << " <other options> -c <dir>|<files>   Convert files in batch with your own settings." << std::endl;
                     std::cout << std::endl;
                     std::cout << "Options:" << std::endl;
-                    std::cout << "  " << Glib::path_get_basename (argv[0]) << "[-o <output>|-O <output>] [-q] [-a] [-s|-S] [-p <one.pp3> [-p <two.pp3> ...] ] [-d] [ -j[1-100] -js<1-3> | -t[z] -b<8|16|16f|32> | -n -b<8|16> ] [-Y] [-f] -c <input>" << std::endl;
+                    std::cout << "  " << Glib::path_get_basename (argv[0]) << "[-o <output>|-O <output>] [-q] [-a] [-s|-S] [-p <one.pp3> [-p <two.pp3> ...] ] [-d] [ -j[1-100] -js<1-3> | -t[z] -b<8|16|16f|32> | -n -b<8|16> } -x[1-1000] -xm[0-3] ] [-Y] [-f] -c <input>" << std::endl;
                     std::cout << std::endl;
                     std::cout << "  -c <files>       Specify one or more input files or folders." << std::endl;
                     std::cout << "                   When specifying folders, Rawtherapee will look for image file types which comply" << std::endl;
@@ -573,11 +598,18 @@ int processLineParams ( int argc, char **argv )
                     std::cout << "                   8   = 8-bit integer.  Applies to JPEG, PNG and TIFF. Default for JPEG and PNG." << std::endl;
                     std::cout << "                   16  = 16-bit integer. Applies to TIFF and PNG. Default for TIFF." << std::endl;
                     std::cout << "                   16f = 16-bit float.   Applies to TIFF." << std::endl;
-                    std::cout << "                   32  = 32-bit float.   Applies to TIFF." << std::endl;
+                    std::cout << "                   32  = 32-bit float.   Applies to TIFF and OpenEXR." << std::endl;
                     std::cout << "  -t[z]            Specify output to be TIFF." << std::endl;
                     std::cout << "                   Uncompressed by default, or deflate compression with 'z'." << std::endl;
                     std::cout << "  -n               Specify output to be compressed PNG." << std::endl;
                     std::cout << "                   Compression is hard-coded to PNG_FILTER_PAETH, Z_RLE." << std::endl;
+                    std::cout << "  -x[1-1000]       Specify output to be OpenEXR." << std::endl;
+                    std::cout << "                   Optionally, specify compression level 1-1000 (default value: 45)." << std::endl;
+                    std::cout << "  -xm[0-3]         Specify the compression method by number(default value: 0)." << std::endl;
+                    std::cout << "                   0 = NONE compression " << std::endl;
+                    std::cout << "                   1 = Zip compression" << std::endl;
+                    std::cout << "                   2 = DWAA compressin" << std::endl;
+                    std::cout << "                   3 = DWAB compression" << std::endl;
                     std::cout << "  -Y               Overwrite output if present." << std::endl;
                     std::cout << "  -f               Use the custom fast-export processing pipeline." << std::endl;
                     std::cout << std::endl;
@@ -620,7 +652,9 @@ int processLineParams ( int argc, char **argv )
                 options.saveFormat.format = outputType;
             } else if (outputType == "png") {
                 options.saveFormat.format = outputType;
-            }
+            } else if (outputType == "exr") {
+                options.saveFormat.format = outputType;
+	    }
 
             break;
         }
@@ -633,6 +667,8 @@ int processLineParams ( int argc, char **argv )
             bits = 8;
         } else if (outputType == "tif") {
             bits = 16;
+        } else if (outputType == "exr") {
+            bits = 32;
         } else {
             bits = 8;
         }
@@ -817,6 +853,8 @@ int processLineParams ( int argc, char **argv )
             errorCode = resultImage->saveAsTIFF ( outputFile, bits, isFloat, compression == 0  );
         } else if ( outputType == "png" ) {
             errorCode = resultImage->saveAsPNG ( outputFile, bits );
+        } else if ( outputType == "exr" ) {
+            errorCode = resultImage->saveAsEXR ( outputFile, bits, compression, compressionMethod, isFloat);
         } else {
             errorCode = resultImage->saveToFile (outputFile);
         }

@@ -1836,8 +1836,8 @@ public:
     /** @brief Saves the image to file in a OpenEXR format.
      * @param fname is the name of the file
      * @param bps can be 16 or 32 depending on the bits per pixels the output file will have
-     * @oaram compressionLevel is the comression level (0...100).
-     * @param compressionMethod  is the compression method.
+     * @oaram compressionLevel is the comression level (1...1000).
+     * @param compressionMethod is the compression method.
      * @param isFloat is true for saving float images. Will be ignored by file format not supporting float data
        @return the error code. 0 if none */
     virtual int saveAsEXR (const Glib::ustring &fname, int bos = -1, int compressionLevel = 45, int compressionMethod = 0, bool isFloat = false) const = 0;
